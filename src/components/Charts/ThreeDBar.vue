@@ -1,7 +1,6 @@
 <template>
-  <div class="chart-container">
-    <div id="chart"></div>
-    <div id="chart2"></div>
+  <div class="chart-container-3d-bar">
+
   </div>
 </template>
 
@@ -9,11 +8,20 @@
 import echarts from 'echarts'
 import 'echarts-gl'
 
+const data = [
+  { date: '5.1', app: 7, move: 7 },
+  { date: '5.2', app: 3, move: 3 },
+  { date: '5.3', app: 0, move: 2 },
+  { date: '5.4', app: 1, move: 1 },
+  { date: '5.5', app: 8, move: 9 },
+  { date: '5.6', app: 4, move: 1 },
+  { date: '5.7', app: 5, move: 2 },
+]
+
 var option = {
   xAxis3D: {
     type: 'category',
     name: '',
-    data: ['5-1', '5-2', '5-3', '5-4', '5-5', '5-6', '5-7'],
     splitLine: {
         show: false
     },
@@ -134,15 +142,6 @@ var option = {
     {
       type: 'bar3D',
       barSize: 9,
-      data: [
-        [0, 0, 5],
-        [1, 0, 3],
-        [2, 0, 4],
-        [3, 0, 7],
-        [4, 0, 2],
-        [5, 0, 5],
-        [6, 0, 3]
-      ],
       itemStyle: {
         color: '#1b6bff',
         opacity: 1
@@ -158,15 +157,6 @@ var option = {
     {
       type: 'bar3D',
       barSize: 9,
-      data: [
-        [0, 0, 3],
-        [1, 0, 4],
-        [2, 0, 4],
-        [3, 0, 2],
-        [4, 0, 5],
-        [5, 0, 3],
-        [6, 0, 4]
-      ],
       itemStyle: {
         color: '#36adff',
         opacity: 1
@@ -184,25 +174,55 @@ var option = {
 
 export default {
   name: 'ThreeDBar',
+  data () {
+    return {
+      isLoading: false
+    }
+  },
   mounted() {
-    var myChart = echarts.init(document.getElementById('chart'))
-    myChart.setOption(option, true)
+    var myChart = echarts.init(document.querySelector('.chart-container-3d-bar'))
+    setTimeout(() => {
+      const { axisXData, appData, moveData } = this.createData();
+      option.xAxis3D.data = axisXData
+      option.series[1].data = appData
+      option.series[2].data = moveData
+      myChart.setOption(option, true)
+    }, 2000)
+  },
+  methods: {
+    createData() {
+      // x轴数据
+      const axisXData = []
+      // app数据
+      const appData = []
+      // 出行数据
+      const moveData = []
+      data.forEach((item, index) => {
+        axisXData.push(item.date)
+        appData.push([index, 0, item.app])
+        moveData.push([item.date, 0, item.move])
+      })
+      console.log(axisXData)
+      console.log(appData)
+      console.log(moveData)
+
+      return {
+        axisXData,
+        appData,
+        moveData
+      }
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.chart-container{
+.chart-container-3d-bar{
     position:absolute;
     top: 0px;
     left: 0;
     z-index: 2;
     width: 408px;
     height: 425px;
-
-    #chart {
-        width: 100%;
-        height: 100%;
-    }
 }
 </style>

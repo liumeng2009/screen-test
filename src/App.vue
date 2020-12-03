@@ -39,11 +39,44 @@
             <CityMap />
           </Card>
         </div>
+        <div style="height:485px">
+          <Card :title="'士兵预警详情'">
+            <div class="maque-container">
+              <div class="maque-title">
+                <div class="maque-item">
+                    <span>姓名</span>
+                    <span>手机号</span>
+                    <span>时间</span>
+                    <span>报警原因</span>
+                </div>
+                <div class="maque-title-background"></div>
+              </div>
+              <div
+                class="maque-content"
+                :style="{height: maqueContainrHeight + 'px'}"
+                v-maque="{ speed: 5, count: dataSource.length, containerHeight: maqueContainrHeight, itemHeight: maqueItemHeight }">
+                <div class="maque-move-area" :style="{top:0, height: ( maqueItemHeight * dataSource.length ) + 'px'}">
+                  <div class="maque-item" v-for="(item, key) in dataSource" :key="key">
+                    <span>{{ item.name }}</span>
+                    <span>{{ item.phone }}</span>
+                    <span>{{ item.time }}</span>
+                    <span>{{ item.reason }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
       <div class="right-wrapper">
         <div style="height: 320px; margin-bottom: 16px">
           <Card :title="'违规APP'">
-
+            <Pie />
+          </Card>
+        </div>
+        <div style="height: 485px;">
+          <Card :title="'位置异常'">
+            <HoriLine />
           </Card>
         </div>
       </div>
@@ -52,7 +85,20 @@
 </template>
 
 <script>
-import { Head, Card, ThreeDBar, CityMap } from '@/components'
+import { Head, Card, ThreeDBar, Pie, HoriLine, CityMap } from '@/components'
+import { Maque } from '@/directive'
+
+const maqueData = [
+  { id: 1, name: '李大宇1', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' },
+  { id: 2, name: '李大宇2', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' },
+  { id: 3, name: '李大宇3', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' },
+  { id: 4, name: '李大宇4', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' },
+  { id: 5, name: '李大宇5', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' },
+  { id: 6, name: '李大宇6', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' },
+  { id: 7, name: '李大宇7', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' },
+  { id: 8, name: '李大宇8', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' },
+  { id: 9, name: '李大宇9', phone: '15516617788', time: '12/2 09:28:55', reason: '违规出行' }
+];
 
 export default {
   name: 'App',
@@ -60,17 +106,26 @@ export default {
     Head,
     Card,
     ThreeDBar,
+    Pie,
+    HoriLine,
     CityMap
+  },
+  directives: {
+    Maque
   },
   data () {
     return {
       allPerson: 1635,
-      warningPerson: 455
+      warningPerson: 455,
+      dataSource: [],
+      maqueContainrHeight: 485 - 60 - 40 * 2,
+      maqueItemHeight: 40
     }
   },
   mounted() {
-    console.log(this.allPerson.toString().length)
-    console.log(this.warningPerson.toString().length)
+    setTimeout(() => {
+      this.dataSource = maqueData
+    }, 2000)
   },
   computed: {
     allPersonLeft () {
@@ -244,5 +299,100 @@ html, body {
             0 0 15px  #FBC019;
     }
   }
+}
+
+.maque-container {
+  width: 100%;
+  padding: 0px 32px;
+  box-sizing: border-box;
+  position: relative;
+
+  .maque-content {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+
+    .maque-move-area{
+      position:absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  .maque-title {
+    position:relative;
+    width: 100%;
+    overflow: hidden;
+    z-index: 2;
+
+    .maque-title-background{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #206ED4;
+      opacity: .3;
+      z-index: 1
+    }
+
+    .maque-item::after {
+      background: transparent;
+    }
+  }
+}
+
+.maque-item {
+  position:relative;
+  height: 40px;
+  line-height: 40px;
+  width: 100%;
+  color: #07DBFF;
+
+  & > span {
+    width: 25%;
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 16px;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding-left: 8px;
+  }
+}
+
+.maque-item:nth-child(2n)::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #206ED4;
+  opacity: .3;
+  z-index: 1
+}
+
+.react-has-dot::before {
+  content: '';
+  position:absolute;
+  width: 0px;
+  height: 0px;
+  border: transparent 6px solid;
+  border-left:#07DBFF 6px solid;
+  top: 27px;
+  left: -10px;
+}
+.react-has-dot::after {
+  content: '';
+  position:absolute;
+  width: 0px;
+  height: 0px;
+  border: transparent 6px solid;
+  border-right:#07DBFF 6px solid;
+  top: 27px;
+  right: -8px;
 }
 </style>
