@@ -45,6 +45,7 @@ export default {
                     }
                 },
                 series: [
+                    /*
                     {
                         type: 'lines',
                         coordinateSystem: 'bmap',
@@ -55,7 +56,22 @@ export default {
                             opacity: 1,
                             width: 2
                         }
-                    }, {
+                    }, */
+                    {
+                        type: 'map',
+                        data: [
+                            [120.12322240845, 30.256064370321],
+                            [120.14280555506, 30.256064370321],
+                            [120.14280555506, 30.226125905084],
+                            [120.12322240845, 30.226125905084],
+                            [120.12322240845, 30.256064370321] 
+                        ],
+                        itemStyle: {
+                            borderColor: 'red',
+                            areaColor: 'green'
+                        }
+                    },
+                    {
                         type: 'scatter',
                         coordinateSystem: 'bmap',
                         data: [
